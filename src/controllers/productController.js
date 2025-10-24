@@ -1,6 +1,5 @@
 import Product from "../models/Product.js";
 import Store from "../models/Store.js";
-import IsStoreManager from "../middlewares/storeManagerMiddleware.js";
 
 const productController = {
     async getAll(req, res) {
@@ -12,14 +11,10 @@ const productController = {
         }
     },
 
-    async create(req, res) {
-        try {
-            const product = await Product.create(req.body);
-            res.status(201).json(product);
-        } catch (error) {
-            res.status(500).json({ error: error.message });
-        }
-    },
+    // // Shared create logic so both POST / and POST /store/:storeId use the same behavior
+    // async create(req, res) {
+    //     return createProduct(req, res);
+    // },
 
     async update(req, res) {
         try {
@@ -66,17 +61,30 @@ const productController = {
             const { storeId } = req.params;
             const store = await Store.findByPk(storeId);
             if (!store) return res.status(404).json({ error: "Store not found" });
-
-            // Middleware storeManager já validou permissão
-            const product = await Product.create({
-                ...req.body,
-                store_id: storeId
-            });
-            res.status(201).json(product);
+            // Delegate to shared create logic (ensures consistent validation)
+            req.body.store_id = req.body.store_id || storeId;
+            return createProduct(req, res);
         } catch (error) {
             res.status(500).json({ error: error.message });
         }
     }
 };
+
+// Helper used by both create endpoints
+async function createProduct(req, res) {
+    try {
+        const storeId = req.params.storeId || req.body.store_id;
+        if (!storeId) return res.status(400).json({ error: 'store_id is required' });
+
+        const store = await Store.findByPk(storeId);
+        if (!store) return res.status(404).json({ error: 'Store not found' });
+
+        const productData = { ...req.body, store_id: storeId };
+        const product = await Product.create(productData);
+        res.status(201).json(product);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+}
 
 export default productController;

@@ -6,12 +6,12 @@ import IsStoreManager from "../middlewares/storeManagerMiddleware.js";
 const router = express.Router();
 
 router.get("/", productController.getAll);
-router.post("/", authMiddleware, productController.create);
-router.put("/:id", authMiddleware, productController.update);
-router.delete("/:id", authMiddleware, productController.remove);
+// router.post("/", authMiddleware, IsStoreManager, productController.create);
+router.put("/:id", authMiddleware, IsStoreManager, productController.update);
+router.delete("/:id", authMiddleware, IsStoreManager, productController.remove);
 
 // Rotas de produtos por loja (já requer authMiddleware)
-router.get("/store/:storeId", productController.getStoreProducts);
-router.post("/store/:storeId", authMiddleware, IsStoreManager, productController.createStoreProduct);
+router.get("/stores/:storeId", productController.getStoreProducts);
+router.post("/stores/:storeId", authMiddleware, IsStoreManager, productController.createStoreProduct);
 
 export default router;
