@@ -4,7 +4,7 @@ import bcrypt from "bcryptjs";
 export const getAllUsers = async (_, res) => {
   try {
     const users = await User.findAll({
-      attributes: { exclude: ["password"] }, // nunca retornar senha
+      attributes: { exclude: ["password"] },
       order: [["id", "ASC"]],
     });
     res.json(users);
@@ -32,8 +32,8 @@ export const updateUser = async (req, res) => {
       return res.status(401).json({ message: "Não autorizado" });
     }
 
-  const { id } = req.params;
-  const { name, number, email, password, photo, country, province, street, role } = req.body;
+    const { id } = req.params;
+    const { name, number, email, password, photo, country, province, street, role } = req.body;
 
     const user = await User.findByPk(id);
     if (!user) return res.status(404).json({ message: "Usuário não encontrado" });
