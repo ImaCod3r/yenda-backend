@@ -38,8 +38,8 @@ const Product = sequelize.define("Product", {
     onDelete: 'SET NULL'
   },
   category_id: {
-    type: DataTypes.BIGINT,
-    allowNull: true,
+    type: DataTypes.INTEGER,
+    allowNull: false
   },
 }, {
   tableName: "products",

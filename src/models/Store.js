@@ -22,6 +22,10 @@ const Store = sequelize.define(
         type: DataTypes.TEXT,
         allowNull: false
     },
+    nif: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
     photo: {
       type: DataTypes.STRING,
       allowNull: true,
@@ -34,6 +38,15 @@ const Store = sequelize.define(
       type: DataTypes.DECIMAL,
       allowNull: true,
     },
+    isVerified: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,
+    },
+    email: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      unique: true
+    },
     address: {
       type: DataTypes.STRING,
       allowNull: true,
@@ -41,6 +54,14 @@ const Store = sequelize.define(
     password: {
       type: DataTypes.STRING,
       allowNull: false,
+    },
+    whatsapp: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    number: {
+      type: DataTypes.STRING,
+      allowNull: true,
     },
     created_at: {
       type: DataTypes.DATE,
