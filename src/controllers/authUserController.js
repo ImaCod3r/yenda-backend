@@ -4,7 +4,6 @@ import User from "../models/User.js";
 
 const JWT_SECRET = process.env.JWT_SECRET || "dev_secret";
 
-
 // Register a new user
 async function register(req, res) {
   try {

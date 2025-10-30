@@ -1,6 +1,6 @@
 import jwt from "jsonwebtoken";
 
-export default function authMiddleware(req, res, next) {
+export default function authUser(req, res, next) {
   try {
     // Pega o token do cookie
     const token = req.cookies.token;
