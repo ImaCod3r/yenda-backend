@@ -4,131 +4,130 @@ import User from "../models/User.js";
 
 const JWT_SECRET = process.env.JWT_SECRET || "dev_secret";
 
-const authController = {
-  // Register a new user
-  async register(req, res) {
-    try {
-      const {
-        name,
-        number,
-        email,
-        password,
-        country,
-        province,
-        street,
-        photo,
-      } = req.body;
 
-      // Check if email already exists
-      const existingUser = await User.findOne({ where: { email } });
-      if (existingUser) {
-        return res.status(400).json({ error: "Email already registered." });
-      }
+// Register a new user
+async function register(req, res) {
+  try {
+    const {
+      name,
+      number,
+      email,
+      password,
+      country,
+      province,
+      street,
+      photo,
+    } = req.body;
 
-      // Create new user
-      const user = await User.create({
-        name,
-        number,
-        email,
-        password,
-        country,
-        province,
-        street,
-        photo: photo || null,
-      });
-
-      return res.status(201).json({
-        message: "User registered successfully!",
-        user: {
-          id: user.id,
-          name: user.name,
-          email: user.email,
-          role: user.role,
-          country: user.country,
-          province: user.province,
-          street: user.street,
-        },
-      });
-    } catch (err) {
-      console.error("Register error:", err);
-      return res.status(500).json({ error: "Error registering user." });
+    // Check if email already exists
+    const existingUser = await User.findOne({ where: { email } });
+    if (existingUser) {
+      return res.status(400).json({ error: "Email already registered." });
     }
-  },
 
-  // Login with JWT + cookie
-  async login(req, res) {
-    try {
-      const { email, password } = req.body;
+    // Create new user
+    const user = await User.create({
+      name,
+      number,
+      email,
+      password,
+      country,
+      province,
+      street,
+      photo: photo || null,
+    });
 
-      const user = await User.findOne({ where: { email } });
-      if (!user) return res.status(404).json({ error: "User not found." });
+    return res.status(201).json({
+      message: "User registered successfully!",
+      user: {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        role: user.role,
+        country: user.country,
+        province: user.province,
+        street: user.street,
+      },
+    });
+  } catch (err) {
+    console.error("Register error:", err);
+    return res.status(500).json({ error: "Error registering user." });
+  }
+}
 
-      const valid = await bcrypt.compare(password, user.password);
-      if (!valid) return res.status(401).json({ error: "Invalid password." });
+// Login with JWT + cookie
+async function login(req, res) {
+  try {
+    const { email, password } = req.body;
 
-      const token = jwt.sign(
-        { id: user.id, role: user.role },
-        JWT_SECRET,
-        { expiresIn: "7d" }
-      );
+    const user = await User.findOne({ where: { email } });
+    if (!user) return res.status(404).json({ error: "User not found." });
 
-      // Send token in secure cookie
-      res.cookie("token", token, {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
-        sameSite: "strict",
-        maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
-      });
+    const valid = await bcrypt.compare(password, user.password);
+    if (!valid) return res.status(401).json({ error: "Invalid password." });
 
-      return res.json({
-        message: "Login successful!",
-        user: {
-          id: user.id,
-          name: user.name,
-          email: user.email,
-          role: user.role,
-        },
-        token: token
-      });
-    } catch (err) {
-      console.error("Login error:", err);
-      return res.status(500).json({ error: "Internal server error." });
-    }
-  },
+    const token = jwt.sign(
+      { id: user.id, role: user.role },
+      JWT_SECRET,
+      { expiresIn: "7d" }
+    );
 
-  // Logout (clear cookie)
-  async logout(req, res) {
-    res.clearCookie("token");
-    return res.json({ message: "Logout successful." });
-  },
+    // Send token in secure cookie
+    res.cookie("token", token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "strict",
+      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+    });
 
-  // Protected route - get user profile
-  async profile(req, res) {
-    try {
-      const user = await User.findByPk(req.user.id, {
-        attributes: [
-          "id",
-          "name",
-          "number",
-          "email",
-          "photo",
-          "role",
-          "country",
-          "province",
-          "street",
-          "created_at",
-          "updated_at",
-        ],
-      });
+    return res.json({
+      message: "Login successful!",
+      user: {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        role: user.role,
+      },
+      token: token
+    });
+  } catch (err) {
+    console.error("Login error:", err);
+    return res.status(500).json({ error: "Internal server error." });
+  }
+}
 
-      if (!user) return res.status(404).json({ error: "User not found." });
+// Logout (clear cookie)
+async function logout(req, res) {
+  res.clearCookie("token");
+  return res.json({ message: "Logout successful." });
+}
 
-      return res.json({ user });
-    } catch (err) {
-      console.error("Profile error:", err);
-      return res.status(500).json({ error: "Error loading user profile." });
-    }
-  },
-};
+// Protected route - get user profile
+async function profile(req, res) {
+  try {
+    const user = await User.findByPk(req.user.id, {
+      attributes: [
+        "id",
+        "name",
+        "number",
+        "email",
+        "photo",
+        "role",
+        "country",
+        "province",
+        "street",
+        "created_at",
+        "updated_at",
+      ],
+    });
 
-export default authController;
+    if (!user) return res.status(404).json({ error: "User not found." });
+
+    return res.json({ user });
+  } catch (err) {
+    console.error("Profile error:", err);
+    return res.status(500).json({ error: "Error loading user profile." });
+  }
+}
+
+export { register, login, logout, profile };

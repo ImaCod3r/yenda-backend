@@ -11,7 +11,7 @@ routes.use("/users", userRoutes);
 routes.use("/products", productRoutes);
 routes.use("/stores", storeRoutes);
 
-routes.get("/", (req, res) => {
+routes.get("/", (_, res) => {
   res.json({ message: "API Root Endpoint" });
 });
 

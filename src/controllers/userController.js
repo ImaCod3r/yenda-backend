@@ -1,7 +1,8 @@
 import User from "../models/User.js";
 import bcrypt from "bcryptjs";
+import IsAdmin from "../middlewares/adminMiddleware.js";
 
-export const getAllUsers = async (_, res) => {
+async function getAllUsers (_, IsAdmin, res) {
   try {
     const users = await User.findAll({
       attributes: { exclude: ["password"] },
@@ -13,7 +14,7 @@ export const getAllUsers = async (_, res) => {
   }
 };
 
-export const getUserById = async (req, res) => {
+async function getUserById (req, res) {
   try {
     const { id } = req.params;
     const user = await User.findByPk(id, {
@@ -25,7 +26,8 @@ export const getUserById = async (req, res) => {
     res.status(500).json({ message: "Erro ao buscar usuário", error });
   }
 };
-export const updateUser = async (req, res) => {
+
+async function updateUser(req, res) {
   try {
     // Check if user is authenticated
     if (!req.user) {
@@ -76,7 +78,7 @@ export const updateUser = async (req, res) => {
   }
 };
 
-export const deleteUser = async (req, res) => {
+async function deleteUser (req, res) {
   try {
     const { id } = req.params;
     const deleted = await User.destroy({ where: { id } });
@@ -86,3 +88,5 @@ export const deleteUser = async (req, res) => {
     res.status(500).json({ message: "Erro ao remover usuário", error });
   }
 };
+
+export { getAllUsers, deleteUser, updateUser, getUserById }

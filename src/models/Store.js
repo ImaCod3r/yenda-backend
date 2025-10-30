@@ -13,6 +13,7 @@ const Store = sequelize.define(
     name: {
       type: DataTypes.STRING,
       allowNull: false,
+      unique: true
     },
     description: {
       type: DataTypes.TEXT,
@@ -85,6 +86,12 @@ const Store = sequelize.define(
         if (store.changed('password')) {
           store.password = await bcrypt.hash(store.password, 10);
         }
+      },
+      beforeUpdate: async(store) => {
+        if(store.nif) {
+          // Implement a function to validate nif
+          store.isVerified = true;
+        }    
       }
     }
   }
