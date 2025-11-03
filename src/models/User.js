@@ -33,14 +33,6 @@ const User = sequelize.define("User", {
     type: DataTypes.ENUM("user", "admin"),
     defaultValue: "user",
   },
-  country: {
-    type: DataTypes.TEXT,
-    allowNull: false
-  },
-  province: {
-    type: DataTypes.TEXT,
-    allowNull: false
-  },
   street: {
     type: DataTypes.TEXT,
     allowNull: false
@@ -55,10 +47,9 @@ const User = sequelize.define("User", {
   },
 }, {
   tableName: "users",
-  timestamps: false, // já temos os campos criados manualmente
+  timestamps: false, 
 });
 
-// hash da senha antes de criar
 User.beforeCreate(async (user) => {
   user.password = await bcrypt.hash(user.password, 10);
 });

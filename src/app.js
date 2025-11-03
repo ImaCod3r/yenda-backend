@@ -8,8 +8,8 @@ const app = express();
 
 app.use(express.json({ limit: "10mb" }));
 app.use(cors({
-  origin: "*",
-  credentials: "include"
+  origin: "http://localhost:5173", // provisorio para desenvolvimento
+  credentials: true
 }));
 app.use(cookieParser());
 

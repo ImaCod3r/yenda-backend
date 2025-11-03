@@ -2,7 +2,7 @@ import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
 import User from "../models/User.js";
 
-const JWT_SECRET = process.env.JWT_SECRET || "dev_secret";
+const JWT_SECRET = process.env.JWT_SECRET;
 
 // Register a new user
 async function register(req, res) {
@@ -12,10 +12,8 @@ async function register(req, res) {
       number,
       email,
       password,
-      country,
-      province,
       street,
-      photo,
+      photo
     } = req.body;
 
     // Check if email already exists
@@ -30,8 +28,6 @@ async function register(req, res) {
       number,
       email,
       password,
-      country,
-      province,
       street,
       photo: photo || null,
     });
@@ -43,8 +39,6 @@ async function register(req, res) {
         name: user.name,
         email: user.email,
         role: user.role,
-        country: user.country,
-        province: user.province,
         street: user.street,
       },
     });
@@ -71,12 +65,11 @@ async function login(req, res) {
       { expiresIn: "7d" }
     );
 
-    // Send token in secure cookie
     res.cookie("token", token, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "strict",
-      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+      sameSite: "lax", 
+      secure: false,   
+      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 dias
     });
 
     return res.json({
@@ -111,12 +104,8 @@ async function profile(req, res) {
         "number",
         "email",
         "photo",
-        "role",
-        "country",
-        "province",
         "street",
-        "created_at",
-        "updated_at",
+        "role",
       ],
     });
 
