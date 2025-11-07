@@ -17,7 +17,7 @@ async function getAllStores(_, res) {
     const stores = await Store.findAll({
       attributes: { exclude: ['password'] }, // Don't send password in response
       order: [['created_at', 'DESC']]
-    });
+      });
     return res.json(stores);
   } catch (err) {
     return res.status(500).json({ error: 'Error fetching stores', details: err.message });

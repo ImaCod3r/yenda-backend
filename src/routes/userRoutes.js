@@ -12,6 +12,6 @@ const router = express.Router();
 router.get("/", getAllUsers);
 router.get("/:id", getUserById);
 router.put("/:id", authUser, updateUser);
-router.delete("/:id", deleteUser);
+router.delete("/:id", authUser, deleteUser);
 
 export default router;
