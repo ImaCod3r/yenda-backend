@@ -29,7 +29,7 @@ if (process.env.DB_DIALECT === "sqlite") {
 async function connectDB() {
   try {
     await sequelize.authenticate();
-    await sequelize.sync();
+    // sequelize.sync() removido - use migrations ao invés disso
     console.log("✅ Banco conectado com sucesso!");
   } catch (error) {
     console.error("❌ Erro ao conectar:", error.message);
