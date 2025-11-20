@@ -17,7 +17,7 @@ A API Yenda é um sistema de gerenciamento de lojas e produtos que permite:
 - **Node.js** - Runtime JavaScript
 - **Express.js** - Framework web
 - **Sequelize** - ORM para banco de dados
-- **SQLite/PostgreSQL** - Banco de dados
+- **SQLite/PostgreSQL/MySQL** - Banco de dados
 - **JWT** - Autenticação
 - **bcrypt** - Criptografia de senhas
 - **CORS** - Cross-origin resource sharing
@@ -277,6 +277,17 @@ DB_HOST=localhost
 DB_PORT=5432
 ```
 
+#### MySQL (Hostinger/Remoto)
+```env
+DB_DIALECT=mysql
+DB_NAME=yenda
+DB_USER=seu_usuario
+DB_PASS=sua_senha
+DB_HOST=seu_host_mysql
+DB_PORT=3306
+DB_SSL=true # Para conexões seguras (obrigatório em alguns provedores)
+```
+
 ### Executar Migrações
 ```bash
 npm run migrate
@@ -309,6 +320,7 @@ NODE_ENV=development
 # Banco de Dados
 DB_DIALECT=sqlite
 DB_STORAGE=./database.db
+DB_SSL=false
 
 # JWT
 JWT_SECRET=sua_chave_secreta_jwt
