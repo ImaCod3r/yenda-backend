@@ -6,7 +6,7 @@ export async function up(queryInterface, Sequelize) {
             primaryKey: true,
         },
         name: {
-            type: Sequelize.STRING,
+            type: Sequelize.STRING(255),
             allowNull: false,
         },
         data: {
@@ -21,7 +21,7 @@ export async function up(queryInterface, Sequelize) {
         updatedAt: {
             type: Sequelize.DATE,
             allowNull: false,
-            defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
+            defaultValue: Sequelize.literal('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'),
         },
     });
 }

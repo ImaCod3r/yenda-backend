@@ -15,23 +15,23 @@ export async function up(queryInterface, Sequelize) {
             allowNull: true,
         },
         category: {
-            type: Sequelize.TEXT,
+            type: Sequelize.STRING(255),
             allowNull: false,
         },
         nif: {
-            type: Sequelize.STRING,
+            type: Sequelize.STRING(50),
             allowNull: true,
         },
         photo: {
-            type: Sequelize.STRING,
+            type: Sequelize.STRING(500),
             allowNull: true,
         },
         latitude: {
-            type: Sequelize.DECIMAL,
+            type: Sequelize.DECIMAL(10, 8),
             allowNull: true,
         },
         longitude: {
-            type: Sequelize.DECIMAL,
+            type: Sequelize.DECIMAL(11, 8),
             allowNull: true,
         },
         isVerified: {
@@ -39,24 +39,24 @@ export async function up(queryInterface, Sequelize) {
             defaultValue: false,
         },
         email: {
-            type: Sequelize.STRING,
+            type: Sequelize.STRING(255),
             allowNull: false,
             unique: true,
         },
         address: {
-            type: Sequelize.STRING,
+            type: Sequelize.STRING(500),
             allowNull: true,
         },
         password: {
-            type: Sequelize.STRING,
+            type: Sequelize.STRING(255),
             allowNull: false,
         },
         whatsapp: {
-            type: Sequelize.STRING,
+            type: Sequelize.STRING(20),
             allowNull: true,
         },
         number: {
-            type: Sequelize.STRING,
+            type: Sequelize.STRING(20),
             allowNull: true,
         },
         created_at: {
@@ -65,7 +65,7 @@ export async function up(queryInterface, Sequelize) {
         },
         updated_at: {
             type: Sequelize.DATE,
-            defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
+            defaultValue: Sequelize.literal('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'),
         },
     });
 

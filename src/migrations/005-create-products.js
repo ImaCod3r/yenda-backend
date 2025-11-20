@@ -6,7 +6,7 @@ export async function up(queryInterface, Sequelize) {
             autoIncrement: true,
         },
         name: {
-            type: Sequelize.STRING,
+            type: Sequelize.STRING(255),
             allowNull: false,
         },
         description: {
@@ -14,7 +14,7 @@ export async function up(queryInterface, Sequelize) {
             allowNull: true,
         },
         photo: {
-            type: Sequelize.STRING,
+            type: Sequelize.STRING(500),
             allowNull: true,
         },
         price: {
@@ -53,7 +53,7 @@ export async function up(queryInterface, Sequelize) {
         updatedAt: {
             type: Sequelize.DATE,
             allowNull: false,
-            defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
+            defaultValue: Sequelize.literal('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'),
         },
     });
 

@@ -20,23 +20,23 @@ const Store = sequelize.define(
       allowNull: true,
     },
     category: {
-        type: DataTypes.TEXT,
-        allowNull: false
+      type: DataTypes.STRING(255),
+      allowNull: false
     },
     nif: {
-      type: DataTypes.STRING,
+      type: DataTypes.STRING(50),
       allowNull: true,
     },
     photo: {
-      type: DataTypes.STRING,
+      type: DataTypes.STRING(500),
       allowNull: true,
     },
     latitude: {
-      type: DataTypes.DECIMAL,
+      type: DataTypes.DECIMAL(10, 8),
       allowNull: true,
     },
     longitude: {
-      type: DataTypes.DECIMAL,
+      type: DataTypes.DECIMAL(11, 8),
       allowNull: true,
     },
     isVerified: {
@@ -44,24 +44,24 @@ const Store = sequelize.define(
       defaultValue: false,
     },
     email: {
-      type: DataTypes.STRING,
+      type: DataTypes.STRING(255),
       allowNull: false,
       unique: true
     },
     address: {
-      type: DataTypes.STRING,
+      type: DataTypes.STRING(500),
       allowNull: true,
     },
     password: {
-      type: DataTypes.STRING,
+      type: DataTypes.STRING(255),
       allowNull: false,
     },
     whatsapp: {
-      type: DataTypes.STRING,
+      type: DataTypes.STRING(20),
       allowNull: true,
     },
     number: {
-      type: DataTypes.STRING,
+      type: DataTypes.STRING(20),
       allowNull: true,
     },
     created_at: {
@@ -87,11 +87,11 @@ const Store = sequelize.define(
           store.password = await bcrypt.hash(store.password, 10);
         }
       },
-      beforeUpdate: async(store) => {
-        if(store.nif) {
+      beforeUpdate: async (store) => {
+        if (store.nif) {
           // Implement a function to validate nif
           store.isVerified = true;
-        }    
+        }
       }
     }
   }

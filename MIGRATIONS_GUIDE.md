@@ -47,21 +47,23 @@ node src/migrations/migrate.js
 
 Certifique-se de que está configurado corretamente:
 
-**Para SQLite (desenvolvimento):**
+**Para MySQL (recomendado para produção):**
+```env
+DB_DIALECT=mysql
+DB_NAME=yenda
+DB_USER=yenda_user
+DB_PASS=sua_senha
+DB_HOST=localhost
+DB_PORT=3306
+```
+
+**Para SQLite (apenas desenvolvimento local):**
 ```env
 DB_DIALECT=sqlite
 DB_STORAGE=./database.db
 ```
 
-**Para PostgreSQL (produção):**
-```env
-DB_DIALECT=postgres
-DB_NAME=yenda
-DB_USER=seu_usuario
-DB_PASS=sua_senha
-DB_HOST=localhost
-DB_PORT=5432
-```
+> **📘 Nota:** As migrations foram otimizadas para MySQL com recursos como `ON UPDATE CURRENT_TIMESTAMP` e tipos de dados específicos. Para configurar MySQL, veja [MYSQL_SETUP.md](file:///Users/sabinojose/Documents/Projetos/yenda-backend/MYSQL_SETUP.md).
 
 ### ✅ 2. Banco de dados limpo
 
@@ -72,8 +74,8 @@ Se você já executou o servidor antes, o `sequelize.sync()` pode ter criado tab
 # Para SQLite
 rm database.db
 
-# Para PostgreSQL
-psql -U postgres -c "DROP DATABASE yenda; CREATE DATABASE yenda;"
+# Para MySQL
+mysql -u yenda_user -p yenda -e "DROP DATABASE yenda; CREATE DATABASE yenda CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"
 ```
 
 **Opção B - Manter dados existentes:**
@@ -173,14 +175,28 @@ export async function down(queryInterface, Sequelize) {
 node -e "import('./src/config/database.js').then(({sequelize}) => sequelize.authenticate().then(() => console.log('✅ Conectado')).catch(e => console.log('❌ Erro:', e.message)))"
 ```
 
-### **Ver tabelas criadas (SQLite):**
+### **Ver tabelas criadas:**
+
+**SQLite:**
 ```bash
 sqlite3 database.db ".tables"
 ```
 
-### **Ver estrutura de uma tabela (SQLite):**
+**MySQL:**
+```bash
+mysql -u yenda_user -p yenda -e "SHOW TABLES;"
+```
+
+### **Ver estrutura de uma tabela:**
+
+**SQLite:**
 ```bash
 sqlite3 database.db ".schema users"
+```
+
+**MySQL:**
+```bash
+mysql -u yenda_user -p yenda -e "DESCRIBE users;"
 ```
 
 ---

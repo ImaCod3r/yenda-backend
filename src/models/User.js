@@ -34,7 +34,7 @@ const User = sequelize.define("User", {
     defaultValue: "user",
   },
   street: {
-    type: DataTypes.TEXT,
+    type: DataTypes.STRING(500),
     allowNull: false
   },
   created_at: {
@@ -47,7 +47,7 @@ const User = sequelize.define("User", {
   },
 }, {
   tableName: "users",
-  timestamps: false, 
+  timestamps: false,
 });
 
 User.beforeCreate(async (user) => {
