@@ -12,8 +12,8 @@ async function uploadImage(req, res) {
 
         // Compress and resize image
         const compressedBuffer = await sharp(filePath)
-            .resize(800) // Resize to max width 800px, auto height
-            .jpeg({ quality: 80 }) // Convert to JPEG with 80% quality
+            .resize(800)
+            .jpeg({ quality: 80 }) 
             .toBuffer();
 
         const base64Data = compressedBuffer.toString("base64");
