@@ -1,7 +1,7 @@
 import express from "express";
 const router = express.Router();
 import { register, login, logout, profile } from "../controllers/authUserController.js";
-import authUser from "../middlewares/authUSer.js";
+import authUser from "../middlewares/authUser.js";
 
 router.post("/register", register);
 router.post("/login", login);

@@ -1,7 +1,7 @@
 import Store from './Store.js';
 import Product from './Product.js';
 import User from './User.js';
-import ProductCategory from './productCategory.js';
+import ProductCategory from './ProductCategory.js';
 import StoreCategory from './StoreCategory.js';
 
 // Define associations between models
@@ -18,4 +18,4 @@ Product.belongsTo(ProductCategory, { foreignKey: 'category_id' });
 StoreCategory.hasMany(Store, { foreignKey: 'category_id' });
 Store.belongsTo(StoreCategory, { foreignKey: 'category_id' });
 
-export { Store, Product, User };
+export { Store, Product, User, ProductCategory, StoreCategory };
