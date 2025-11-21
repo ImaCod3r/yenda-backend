@@ -1,12 +1,22 @@
 import Image from "../models/Image.js";
 import fs from "fs";
+import sharp from "sharp";
 
 async function uploadImage(req, res) {
     try {
+        if (!req.file) {
+            return res.status(400).json({ error: "Nenhum arquivo enviado." });
+        }
         const filePath = req.file.path;
         const fileName = req.file.originalname;
 
-        const base64Data = fs.readFileSync(filePath, { encoding: "base64" });
+        // Compress and resize image
+        const compressedBuffer = await sharp(filePath)
+            .resize(800) // Resize to max width 800px, auto height
+            .jpeg({ quality: 80 }) // Convert to JPEG with 80% quality
+            .toBuffer();
+
+        const base64Data = compressedBuffer.toString("base64");
 
         const image = await Image.create({
             name: fileName,
@@ -17,8 +27,12 @@ async function uploadImage(req, res) {
 
         res.json({ message: "Upload concluido!", data: image });
     } catch (error) {
-        console.error(error);
-        await Image.sync();
+        console.error("Error in uploadImage:", error);
+        // Ensure file is deleted even if error occurs
+        if (req.file && req.file.path && fs.existsSync(req.file.path)) {
+            fs.unlinkSync(req.file.path);
+        }
+        res.status(500).json({ error: "Erro ao fazer upload da imagem." });
     }
 }
 
@@ -35,6 +49,7 @@ async function getImage(req, res) {
             "Content-Type": "image/jpeg",
             "Content-Length": imgBuffer.length,
         });
+
         res.end(imgBuffer);
     } catch (error) {
         console.error(error);
