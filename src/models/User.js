@@ -35,7 +35,7 @@ const User = sequelize.define("User", {
   },
   street: {
     type: DataTypes.STRING(500),
-    allowNull: false
+    allowNull: true
   },
   created_at: {
     type: DataTypes.DATE,

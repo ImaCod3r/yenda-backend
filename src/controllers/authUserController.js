@@ -16,6 +16,25 @@ async function register(req, res) {
       photo
     } = req.body;
 
+    // Validate required fields
+    if (!name || !number || !email || !password) {
+      return res.status(400).json({
+        error: "Missing required fields.",
+        details: {
+          name: !name ? "Name is required" : null,
+          number: !number ? "Number is required" : null,
+          email: !email ? "Email is required" : null,
+          password: !password ? "Password is required" : null,
+        }
+      });
+    }
+
+    // Validate email format
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      return res.status(400).json({ error: "Invalid email format." });
+    }
+
     // Check if email already exists
     const existingUser = await User.findOne({ where: { email } });
     if (existingUser) {
@@ -28,7 +47,7 @@ async function register(req, res) {
       number,
       email,
       password,
-      street,
+      street: street || null,
       photo: photo || null,
     });
 
@@ -44,7 +63,23 @@ async function register(req, res) {
     });
   } catch (err) {
     console.error("Register error:", err);
-    return res.status(500).json({ error: "Error registering user." });
+
+    // More detailed error response
+    if (err.name === 'SequelizeValidationError') {
+      return res.status(400).json({
+        error: "Validation error.",
+        details: err.errors.map(e => ({ field: e.path, message: e.message }))
+      });
+    }
+
+    if (err.name === 'SequelizeUniqueConstraintError') {
+      return res.status(400).json({ error: "Email already registered." });
+    }
+
+    return res.status(500).json({
+      error: "Error registering user.",
+      message: process.env.NODE_ENV === 'development' ? err.message : undefined
+    });
   }
 }
 
@@ -67,8 +102,8 @@ async function login(req, res) {
 
     res.cookie("token", token, {
       httpOnly: true,
-      sameSite: "lax", 
-      secure: false,   
+      sameSite: "lax",
+      secure: false,
       maxAge: 7 * 24 * 60 * 60 * 1000, // 7 dias
     });
 
