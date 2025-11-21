@@ -15,7 +15,10 @@ app.use(cors({
 }));
 app.use(cookieParser());
 
-// Rotas
+// Routes
 app.use("/api", verifyApiKey, routes);
+app.get("/", (_, res) => {
+  res.json({ "message": "Welcome to Yenda API" });
+});
 
 export default app;
