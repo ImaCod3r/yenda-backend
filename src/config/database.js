@@ -14,11 +14,12 @@ const sequelize = new Sequelize(
   }
 );
 
-
 async function connectDB() {
   try {
     await sequelize.authenticate();
     console.log("✅ Banco conectado com sucesso!");
+    await sequelize.sync({ alter: true });
+    console.log("🛠️ Tabelas sincronizadas!");
   } catch (error) {
     console.error("❌ Erro ao conectar:", error.message);
   }
