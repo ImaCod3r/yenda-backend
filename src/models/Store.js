@@ -6,8 +6,7 @@ const Store = sequelize.define(
   "Store",
   {
     id: {
-      type: DataTypes.UUID,
-      defaultValue: DataTypes.UUIDV4,
+      type: DataTypes.BIGINT,
       primaryKey: true,
     },
     name: {
